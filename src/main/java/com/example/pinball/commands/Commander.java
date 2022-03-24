@@ -46,7 +46,11 @@ public class Commander implements Command {
         } else if (pinball.getBalls() == 0) {
             System.out.println(pinball.getFactory().createBall3());
         } else if (pinball.getBalls() < 0) {
-            System.out.println(pinball.getFactory().createGameOver());
+            if (pinball.getScore() >= 40000 && lvl >= 2) {
+                System.out.println("YOU WON, CONGRATS!!");
+            } else if (pinball.getScore() < 40000) {
+                System.out.println(pinball.getFactory().createGameOver());
+            }
             pinball.setScore(0);
             pinball.setStatus(new NoCredit());
         }

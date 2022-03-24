@@ -145,6 +145,7 @@ public class GameRound {
                 if(pinball.getBalls() > 0) {
                     elementGotHit(scanner);
                 }
+
             } else if (noCreditChoice == 3) {
                 unavailableChoice = false;
             }  else {
@@ -175,7 +176,6 @@ public class GameRound {
 
     }
 
-
     public void useFlipper(Scanner scanner) {
         boolean isFlipperOrHole = true;
         while (isFlipperOrHole) {
@@ -205,15 +205,10 @@ public class GameRound {
             }
             beforeFlipper(scanner);
 
+
+
         } else {
             getNoCreditAndReadyChoices(scanner);
         }
-    }
-
-    @Override
-    public String toString() {
-        return "GameRound{" +
-                "elements=" + elements +
-                '}';
     }
 }
