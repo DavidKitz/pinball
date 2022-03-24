@@ -11,7 +11,7 @@ public class Counter implements Visitor{
     public void visit(Bumper bumper) {
         if (bumper.getHits() >= 4)
             this.point += 10000;
-        System.out.println("YOU GOT" + 10000 + " BONUS POINTS");
+        System.out.println("YOU GOT " + 10000 + " BONUS POINTS");
     }
 
     @Override
@@ -26,7 +26,7 @@ public class Counter implements Visitor{
     public void visit(Kicker kicker) {
         if (kicker.getHits() >= 3) {
             this.point += 1000;
-            System.out.println("YOU GOT" + 1000 + " BONUS POINTS");
+            System.out.println("YOU GOT " + 1000 + " BONUS POINTS");
         }
     }
 
@@ -35,7 +35,7 @@ public class Counter implements Visitor{
         if (ramp.isOpen()) {
             if (ramp.getHits() >= 2) {
                 this.point += 5000;
-                System.out.println("YOU GOT" + 5000 + " BONUS POINTS");
+                System.out.println("YOU GOT " + 5000 + " BONUS POINTS");
             }
         }
 
@@ -45,7 +45,7 @@ public class Counter implements Visitor{
     public void visit(Spinner spinner) {
         if (spinner.getHits() > 2) {
             this.point += 3000;
-            System.out.println("YOU GOT" + 3000 + " BONUS POINTS");
+            System.out.println("YOU GOT " + 3000 + " BONUS POINTS");
         }
     }
 
@@ -53,7 +53,7 @@ public class Counter implements Visitor{
     public void visit(Target target) {
         if (target.getHits() > 3) {
             this.point += 500;
-            System.out.println("YOU GOT" + 500 + " BONUS POINTS");
+            System.out.println("YOU GOT " + 500 + " BONUS POINTS");
         }
     }
 
