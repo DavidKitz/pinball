@@ -14,7 +14,7 @@ public class Flipper implements PinballElement{
 
     @Override
     public void hit() {
-        System.out.println("THE " + name + "IS HIT!");
+        System.out.println("THE " + name + " IS HIT!");
     }
 
     @Override

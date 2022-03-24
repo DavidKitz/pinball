@@ -8,14 +8,14 @@ public class Playing extends Status {
     }
 
     @Override
-    public String addCoin(Pinball pinball) {
-        return super.addCoin(pinball);
+    public void addCoin(Pinball pinball) {
+        super.addCoin(pinball);
     }
 
     @Override
-    public String start(Pinball pinball) {
+    public void start(Pinball pinball) {
         pinball.setStatus(this);
-        return "Developed by: Rajeh Abdulhadi & David Kitz";
+        System.out.println("Developed by: Rajeh Abdulhadi & David Kitz");
     }
 
 }

@@ -4,6 +4,8 @@ import com.example.pinball.commands.Command;
 import com.example.pinball.commands.Commander;
 import com.example.pinball.commands.RampCommand;
 import com.example.pinball.elements.*;
+import com.example.pinball.factories.Ball1;
+import com.example.pinball.factories.Ball12;
 import com.example.pinball.factories.DohFactory;
 import com.example.pinball.factories.UniversFactory;
 import com.example.pinball.medirator.Mediator;
@@ -14,6 +16,7 @@ import com.example.pinball.visitor.Counter;
 import com.example.pinball.visitor.Reset;
 import com.example.pinball.visitor.Visitor;
 
+import java.nio.file.Watchable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -23,7 +26,6 @@ public class GameRound {
 
     private Pinball pinball = Pinball.getPinball();
 
-    private boolean exit = false;
     private List<PinballElement> elements = new ArrayList<>();
 
     private Random random = new Random();
@@ -68,6 +70,10 @@ public class GameRound {
     public GameRound() {
     }
 
+    public Status getGameStatus(){
+        return pinball.getStatus();
+    }
+
     public void setPinballElements () {
 
         commandList.add(spinnerCommand1);
@@ -82,6 +88,7 @@ public class GameRound {
         elements.add(leftFlipper);
         elements.add(kicker1);
         elements.add(kicker2);
+        elements.add(ramp);
         bumpers.add(bumper1);
         bumpers.add(bumper2);
         bumpers.add(bumper3);
@@ -95,12 +102,24 @@ public class GameRound {
         for (Target target : targets) {
             target.setMediator(mediator);
         }
+        pinball.setElements(elements);
+    }
+
+    public void play(Scanner scanner) {
+        setPinballElements();
+        styleChoice(scanner);
+        getNoCreditAndReadyChoices(scanner);
+
     }
 
     public void styleChoice(Scanner scanner){
+        System.out.println("CHOOSE THE STYLE:");
+        System.out.println(new Ball12().showBall());
+        System.out.println("********************************************** OR **********************************************");
+        System.out.println(new Ball1().showBall());
         boolean unavailableChoice = true;
         while (unavailableChoice) {
-            System.out.print("YOUR CHOICE IS :\n");
+            System.out.print("\nYOUR CHOICE IS :\n");
             int factoryChoice = scanner.nextInt();
             if (factoryChoice == 1) {
                 pinball.setFactory(new DohFactory());
@@ -114,24 +133,22 @@ public class GameRound {
             }
         }
     }
-    public Status getGameStatus(){
-        return pinball.getStatus();
-    }
 
     public void getNoCreditAndReadyChoices(Scanner scanner) {
-        System.out.println("YOUR CREDIT IS: " + pinball.getCredit());
-        System.out.println("IF YOU WANNA ADD CREDIT PRESS -1-, PRESS -2- TO START THE GAME OR -3- TO LEAVE THE GAME.\n");
         boolean unavailableChoice = true;
         while (unavailableChoice) {
+            System.out.println("IF YOU WANNA ADD CREDIT PRESS -1-, PRESS -2- TO START THE GAME OR -3- TO LEAVE THE GAME.\n");
+            System.out.println("YOUR CREDIT IS: " + pinball.getCredit());
             int noCreditChoice = scanner.nextInt();
             if (noCreditChoice == 1) {
                 pinball.getStatus().addCoin(pinball);
-                unavailableChoice = false;
+                unavailableChoice = true;
             } else if (noCreditChoice == 2) {
                 pinball.getStatus().start(pinball);
-                unavailableChoice = false;
+                if(pinball.getBalls() > 0) {
+                    elementGotHit(scanner);
+                }
             } else if (noCreditChoice == 3) {
-                exit = true;
                 unavailableChoice = false;
             }  else {
                 System.out.println("PLEASE CHOOSE BETWEEN 1, 2 OR 3 !");
@@ -141,19 +158,23 @@ public class GameRound {
     }
 
     public void beforeFlipper(Scanner scanner) {
-        System.out.println("TO FLIP PRESS -1-, PRESS -2- TO START THE GAME OR -3- TO ADD A COIN.\n");
-        boolean notFlipper = true;
-        while (notFlipper) {
-            int beforeFlipperChoice = scanner.nextInt();
-            if (beforeFlipperChoice == 1) {
-                notFlipper = false;
-            } else if (beforeFlipperChoice == 2) {
-                pinball.getStatus().start(pinball);
-            } else if (beforeFlipperChoice == 3) {
-                pinball.getStatus().addCoin(pinball);
+        if (pinball.getBalls() >= 0) {
+            boolean notFlipper = true;
+            while (notFlipper) {
+                System.out.println("TO FLIP PRESS -1-, PRESS -2- TO START THE GAME OR -3- TO ADD A COIN.\n");
+                int beforeFlipperChoice = scanner.nextInt();
+                if (beforeFlipperChoice == 1) {
+                    notFlipper = false;
+                } else if (beforeFlipperChoice == 2) {
+                    pinball.getStatus().start(pinball);
+                } else if (beforeFlipperChoice == 3) {
+                    pinball.getStatus().addCoin(pinball);
+                }
             }
+            useFlipper(scanner);
+        } else {
+            getNoCreditAndReadyChoices(scanner);
         }
-        useFlipper(scanner);
 
     }
 
@@ -161,20 +182,34 @@ public class GameRound {
     public void useFlipper(Scanner scanner) {
         boolean isFlipperOrHole = true;
         while (isFlipperOrHole) {
-            int option = random.nextInt(9);
+            int option = random.nextInt(7);
             if (!(elements.get(option) instanceof Hole) && !(elements.get(option) instanceof Flipper)) {
                 isFlipperOrHole = false;
+                elementGotHit(scanner);
             }
         }
-        elementGotHit(scanner);
     }
 
     public void elementGotHit(Scanner scanner) {
-            int option = random.nextInt(8);
-            elements.get(option).hit();
-            if (elements.get(option) instanceof Flipper) {
-                useFlipper(scanner);
+        if (pinball.getBalls() == 3) {
+            System.out.println(pinball.getFactory().createBall1());
+            pinball.setBalls(2);
+        }
+        if (pinball.getBalls() >= 0) {
+            boolean isNotFlipper = true;
+            while (isNotFlipper) {
+                int option = random.nextInt(7);
+                elements.get(option).hit();
+                if (elements.get(option) instanceof Flipper) {
+                    isNotFlipper = false;
+                } if (elements.get(option) instanceof Hole && pinball.getBalls() < 0) {
+                    isNotFlipper = false;
+                }
+            }
+            beforeFlipper(scanner);
 
+        } else {
+            getNoCreditAndReadyChoices(scanner);
         }
     }
 

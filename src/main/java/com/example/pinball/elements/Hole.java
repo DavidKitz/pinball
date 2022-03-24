@@ -14,6 +14,7 @@ public class Hole implements PinballElement {
 
     @Override
     public void hit() {
+        System.out.println("YOU LOST A BALL!");
         command.execute(this);
     }
 

@@ -24,7 +24,7 @@ public class Target implements PinballElement {
         setDown(true);
         command.execute(this);
         mediator.hitTarget();
-        System.out.println("THE " + name + "IS HIT!");
+        System.out.println("THE " + name + " IS HIT!");
     }
 
     public void setCommand(Command command) {

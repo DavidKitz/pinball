@@ -8,20 +8,20 @@ public class Ready extends Status{
     }
 
     @Override
-    public String addCoin(Pinball pinball) {
-        return super.addCoin(pinball);
+    public void addCoin(Pinball pinball) {
+        super.addCoin(pinball);
     }
 
     @Override
-    public String start(Pinball pinball) {
+    public void start(Pinball pinball) {
         pinball.setStatus(new Playing());
         if (pinball.getCredit() > 0) {
             pinball.setCredit(pinball.getCredit() - 1);
             pinball.setBalls(3);
-            return "Let's play!!";
+            System.out.println("Let's play!!");
         } else {
             pinball.setStatus(new NoCredit());
-            return "THERE IS NO CREDIT!";
+            System.out.println("THERE IS NO CREDIT!");
         }
     }
 }

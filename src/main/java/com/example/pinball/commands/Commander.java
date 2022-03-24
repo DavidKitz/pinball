@@ -22,23 +22,7 @@ public class Commander implements Command {
     @Override
     public void execute(PinballElement element) {
         if (element instanceof Hole) {
-            for (PinballElement element1 : pinball.getElements()) {
-                element1.accept(reset);
-            }
-            pinball.setScore(pinball.getScore() + counter.getPoint());
-            if (pinball.getBalls() > 0) {
-                pinball.setBalls(pinball.getBalls() - 1);
-                if (pinball.getBalls() == 1) {
-                    System.out.println(pinball.getFactory().createBall2());
-                } else if (pinball.getBalls() == 0) {
-                    System.out.println(pinball.getFactory().createBall3());
-                }
-            } else if (pinball.getBalls() == 0) {
-                System.out.println(pinball.getFactory().createGameOver());
-                pinball.setStatus(new NoCredit());
-            }
-            counter.setPoint(0);
-            this.lvl = 1;
+            holeOnAction();
         } else {
             element.accept(counter);
             if (counter.getPoint() >= 1000L * lvl) {
@@ -46,7 +30,28 @@ public class Commander implements Command {
                 System.out.println("YOUR LEVEL IS " + this.lvl);
             }
             pinball.setScore(pinball.getScore() + (lvl * 1000L));
+            System.out.println(pinball.getScore());
         }
+    }
+
+    public void holeOnAction() {
+        for (PinballElement element1 : pinball.getElements()) {
+            element1.accept(reset);
+        }
+        pinball.setScore(pinball.getScore() + counter.getPoint());
+        System.out.println("YOUR SCORE IS:" + pinball.getScore());
+        pinball.setBalls(pinball.getBalls() - 1);
+        if (pinball.getBalls() == 1) {
+            System.out.println(pinball.getFactory().createBall2());
+        } else if (pinball.getBalls() == 0) {
+            System.out.println(pinball.getFactory().createBall3());
+        } else if (pinball.getBalls() < 0) {
+            System.out.println(pinball.getFactory().createGameOver());
+            pinball.setScore(0);
+            pinball.setStatus(new NoCredit());
+        }
+        counter.setPoint(0);
+        this.lvl = 1;
     }
 
     public void setLvl(int lvl) {

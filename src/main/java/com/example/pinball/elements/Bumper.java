@@ -20,7 +20,7 @@ public class Bumper implements PinballElement {
         this.hits++;
         setLighted(true);
         command.execute(this);
-        System.out.println("THE " + name + "IS HIT!");
+        System.out.println("THE " + name + " IS HIT!");
     }
 
     @Override

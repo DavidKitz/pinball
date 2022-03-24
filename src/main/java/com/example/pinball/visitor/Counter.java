@@ -19,7 +19,6 @@ public class Counter implements Visitor{
 
     @Override
     public void visit(Hole hole) {
-        hole.setBonus(getPoint());
     }
 
     @Override
