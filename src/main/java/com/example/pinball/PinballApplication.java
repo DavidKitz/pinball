@@ -31,7 +31,6 @@ public class PinballApplication {
 
         GameRound gameRound = new GameRound();
         Scanner scanner = new Scanner(System.in);
-
         gameRound.play(scanner);
     }
 }

@@ -25,7 +25,7 @@ public class Commander implements Command {
             holeOnAction();
         } else {
             element.accept(counter);
-            if (counter.getPoint() >= 1000L * lvl) {
+            if (counter.getPoint() >= 500L * lvl) {
                 setLvl(lvl + 1);
                 System.out.println("YOUR LEVEL IS " + this.lvl);
             }
@@ -38,8 +38,8 @@ public class Commander implements Command {
         for (PinballElement element1 : pinball.getElements()) {
             element1.accept(reset);
         }
+        System.out.println("YOUR SCORE IS:" + pinball.getScore() + " AND " + counter.getPoint() + " BONUS.");
         pinball.setScore(pinball.getScore() + counter.getPoint());
-        System.out.println("YOUR SCORE IS:" + pinball.getScore());
         pinball.setBalls(pinball.getBalls() - 1);
         if (pinball.getBalls() == 1) {
             System.out.println(pinball.getFactory().createBall2());

@@ -17,9 +17,13 @@ public class Ramp implements PinballElement {
 
     @Override
     public void hit() {
-        hits++;
-        command.execute(this);
-        System.out.println("THE " + name + " IS HIT!");
+        if (isOpen) {
+            hits++;
+            command.execute(this);
+            System.out.println("THE " + name + " IS HIT!");
+        } else {
+            System.out.println("THE " + name + " IS CLOSE!");
+        }
     }
 
     @Override

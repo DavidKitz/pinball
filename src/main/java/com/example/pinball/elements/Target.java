@@ -20,11 +20,15 @@ public class Target implements PinballElement {
 
     @Override
     public void hit() {
-        this.hits++;
-        setDown(true);
-        command.execute(this);
-        mediator.hitTarget();
-        System.out.println("THE " + name + " IS HIT!");
+        if (!isDown) {
+            this.hits++;
+            setDown(true);
+            command.execute(this);
+            mediator.hitTarget();
+            System.out.println("THE " + name + " IS HIT!");
+        } else {
+            System.out.println("THE " + name + " IS DOWN!");
+        }
     }
 
     public void setCommand(Command command) {

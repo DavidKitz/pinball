@@ -10,13 +10,10 @@ import com.example.pinball.factories.DohFactory;
 import com.example.pinball.factories.UniversFactory;
 import com.example.pinball.medirator.Mediator;
 import com.example.pinball.medirator.PinballMediator;
-import com.example.pinball.status.NoCredit;
 import com.example.pinball.status.Status;
 import com.example.pinball.visitor.Counter;
 import com.example.pinball.visitor.Reset;
-import com.example.pinball.visitor.Visitor;
 
-import java.nio.file.Watchable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -182,7 +179,7 @@ public class GameRound {
     public void useFlipper(Scanner scanner) {
         boolean isFlipperOrHole = true;
         while (isFlipperOrHole) {
-            int option = random.nextInt(7);
+            int option = random.nextInt(14);
             if (!(elements.get(option) instanceof Hole) && !(elements.get(option) instanceof Flipper)) {
                 isFlipperOrHole = false;
                 elementGotHit(scanner);
@@ -198,7 +195,7 @@ public class GameRound {
         if (pinball.getBalls() >= 0) {
             boolean isNotFlipper = true;
             while (isNotFlipper) {
-                int option = random.nextInt(7);
+                int option = random.nextInt(14);
                 elements.get(option).hit();
                 if (elements.get(option) instanceof Flipper) {
                     isNotFlipper = false;
@@ -213,4 +210,10 @@ public class GameRound {
         }
     }
 
+    @Override
+    public String toString() {
+        return "GameRound{" +
+                "elements=" + elements +
+                '}';
+    }
 }
